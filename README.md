@@ -5,5 +5,8 @@
 Folders such as <number> are separate
 practicums that solve a problem.
 
-
+To build:
+$ g++ <number>/main.cpp
+$ ./a.out
+etc.
 
