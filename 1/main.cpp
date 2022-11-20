@@ -10,13 +10,13 @@ bool eq(double lhs, double rhs)
 	return abs(lhs - rhs) < 0.0001;
 }
 template<typename T>
-int sign(T)
+int sign(const T& var)
 {
-	if (T > 0)
+	if (var > 0)
 	{
 		return 1;
 	}
-	else if (T == 0)
+	else if (var == 0)
 	{
 		return 0;
 	}
