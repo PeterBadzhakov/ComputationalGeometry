@@ -72,6 +72,14 @@ int main()
 		cap = (a - c) ^ (p - c),
 		abc = (b - a) ^ (c - a);
 	
+	if(sign(abc) == sign(abp) == sign(bcp) == sign(cap))
+	{
+		cout << "inside\n";
+	}
+	else
+	{
+		cout << "outside\n";
+	}
 
 	return 0;
 }
