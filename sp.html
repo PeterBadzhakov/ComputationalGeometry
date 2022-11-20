@@ -1,0 +1,849 @@
+
+<!-- saved from url=(0035)http://www.math.bas.bg/bantchev/sp/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>sp</title>
+
+<style type="text/css">
+body {
+  font-family:sans-serif;
+  font-size:80%;
+  text-align:justify;
+  color:black;
+  background-color:#d8d8d8;
+  margin-left:10%;
+  margin-right:10%;
+}
+h1 {
+  font-size:21px;
+  text-align:center;
+  font-weight:bold;
+  margin-top:2em;
+  margin-bottom:1.5em;
+}
+dl {
+  margin-top:0.0em;
+  margin-bottom:0.0em;
+}
+dt {
+  margin-top:0.5em;
+  margin-bottom:0.0em;
+  font-weight:bold;
+}
+dd {
+  margin-top:0.0em;
+  margin-bottom:0.0em;
+}
+tt {
+  font-family:monospace;
+  font-size:13px;
+  font-weight:bold;
+}
+pre {
+  font-family:monospace;
+  font-size:12px;
+  color:black;
+  background-color:#b0b0e8;
+  border-color:#303030;
+  margin-left:3px;
+  margin-right:3px;
+  border-style:solid;
+  border-width:1px;
+  padding-left:0.5em;
+  padding-top:0.5em;
+  padding-bottom:0.6em;
+}
+span.topic  {font-size:1.2em;font-weight:bold}
+span.csc  {font-variant:small-caps;font-style:italic}
+span.bl {color:#ffffff;background-color:black;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+span.gr {color:#ffffff;background-color:#808080;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+span.wh {color:#000000;background-color:white;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+span.r  {color:#ffffff;background-color:red;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+span.g  {color:#ffffff;background-color:green;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+span.b  {color:#ffffff;background-color:blue;
+         padding-left:.3em;padding-right:.3em;padding-top:0em;padding-bottom:.1em;}
+td.col {
+  padding:5px;
+  text-align:left;
+  color:white;
+}
+span.codbtn {
+  font-variant:small-caps;
+  font-weight:bold;
+  border-style:solid;
+  border-width:2px;
+  border-color:#0000a0;
+  color:#80ffff;
+  background-color:#0000d0;
+}
+</style>
+</head>
+
+<body>
+
+<h1><span style="font-variant:small-caps">Sp</span>: User Manual and Reference</h1>
+
+<p><tt>Sp</tt> (<em>‘simply plot’</em>) transforms a plot description in a simple language into a picture in either of <span class="csc">Encapsulated PostScript</span> (<span class="csc">EPS</span>) or <span class="csc">SVG</span> vector graphics formats.</p>
+
+<p><tt>Sp</tt> aims at being simple and straightforward in use.  Learning the input language for <tt>sp</tt> takes minutes.  Points, straight lines, polylines, polygons, and circles are specified through respective coordinates.  Drawing other curves and figures can be achieved by straight-line approximation.  Colour, line type and width and other visual attributes can be chosen separately for each part of the drawing.</p>
+
+<p>Typically, the input for <tt>sp</tt> is generated programmatically, but simple plots can be prepared by hand.  The default coordinate system can be translated, rotated, and scaled within a drawing as convenience dictates, at as many places as needed.</p>
+
+<p>The two output data formats, <span class="csc">PostScript</span> and <span class="csc">SVG</span>, are widely used for representing vector graphics.  Being geometry-based, as opposed to pixel-based formats, pictures retain quality under up- and downscaling.  <span class="csc">PostScript</span> is a standard for desktop publishing, <span class="csc">EPS</span> being the subset particularly suited to embedding illustrations in printed documents.  <span class="csc">SVG</span> is the standard for web-based vector graphics: an <span class="csc">SVG</span> picture can be viewed individually or embedded in web documents in any web browser.  Thus <tt>sp</tt> caters for the needs of both desktop and web-centred publishing.</p>
+
+<p>A distinctive feature of <tt>sp</tt> is the separation of geometric magnitude, as expressed in coordinates and lengths, from dimensions of denotational character – namely, line width and point size.  While magnitude is effected by scaling, denotational dimension is not.</p>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Running sp</span><br><br>
+<tt>Sp</tt> reads its input from the standard input stream and writes the result file on the standard output.  Typically, one would run <tt>sp</tt> from the command line using redirection (<tt>&lt;</tt>, <tt>&gt;</tt>) or piping (<tt>|</tt>).  For example, if the input file is <tt>input</tt>,</p>
+
+<pre>sp eps &lt;input &gt;result.eps
+</pre>
+
+<p>would generate a result file <tt>result.eps</tt> in <span class="csc">EPS</span> format, and</p>
+
+<pre>sp svg &lt;input &gt;result.svg
+</pre>
+
+<p>would generate a result file <tt>result.svg</tt> in <span class="csc">SVG</span> format.  The word <tt>eps</tt> or <tt>svg</tt> can be either lower- or uppercase.  <span class="csc">EPS</span> is the default, so if this is the required output format, <tt>eps</tt> can be omitted.</p>
+
+<p>A numeric argument to <tt>sp</tt>, such as in</p>
+
+<pre>sp .8 ...
+</pre>
+
+<p>or</p><p>
+
+</p><pre>sp svg 2 ...
+</pre>
+
+<p>establishes an overall scaling factor that applies to all coordinates and lengths in the drawing (but not to line widths, line types, and point sizes).</p><p>
+
+</p><p>When the output is in <span class="csc">EPS</span>, it is possible to move the picture to a specific location.  An invocation such as</p>
+
+<pre>sp 10 20 ...
+</pre>
+
+<p>moves the picture so that its centre becomes the point with coordinates (10mm,20mm).  As the size of the picture does not change, moving the picture is irrelevant to its uses, except when it is displayed individually on a computer screen or printed on a sheet of paper.  Embedding the picture is not effected by moving it.</p>
+
+<p>It is also possible to both move and scale the whole picture as in</p>
+
+<pre>sp <em>x y k</em> ...
+</pre>
+
+<p>In this form, the first two numbers, <em>x</em> and <em>y</em>, specify the new location for the drawing's centre, and the third one, <em>k</em>, is the scaling factor.  The latter applies <em>after</em> the picture is moved, i.e., with respect to its new centre.</p>
+
+<p>Moving is allowed in <span class="csc">EPS</span> mode only, not <span class="csc">SVG</span>, where it does not make much sense.  Specifying overall moving in <span class="csc">SVG</span> mode results in an error message from <tt>sp</tt>.</p>
+
+<p>As the overall scaling and (or) moving result in a picture that differs from what the input file specifies, a note about the said transformation is written as a comment in the output file for user information.</p>
+
+<p>When an output mode argument (<tt>eps</tt>, <tt>svg</tt>) is given to <tt>sp</tt> along with numeric arguments, the former must precede the latter.</p>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Input file format</span><br><br>
+The <tt>sp</tt> input file is a sequence of text lines, each containing a command or data.  Empty lines are allowed and have no consequence.
+
+</p><p>There are two types of commands.  <em>Construction commands</em> specify points and geometric figures, and <em>contextual commands</em> set transformational and visualization parameters.</p>
+
+<p>Commands take data as their arguments.  Construction commands expect their arguments on separate lines, following the line with the name.  These lines can be arbitrarily many, according to the number of objects or their parts.  The data for a contextual command is always of a fixed volume and follows the command name on the same line.</p>
+
+<p>A minus (<b><code>–</code></b>) sign at the very beginning or end of a line, or separated by spaces from its context, it and everything after it until the end of the line are skipped by <tt>sp</tt>.  Also skipped is the remainder of a line after a command or data.  This makes it possible to include comments in the input as seen appropriate.  To prevent non-ascii encodings interfering with the correctness of the input, it is recommended that comments are always preceded by a <b><code>–</code></b>.</p>
+
+<p>Input lines that do not comply with the above rules, or ones that cannot be recognized as valid commands or data, are treated as errors and are signaled by messages on the system's standard error device.  No graphical file is produced if an error is encountered.</p>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Coordinate systems</span><br><br>
+In general, <tt>sp</tt> assumes that constructions take place in a coordinate system whose <em>x</em> axis points to the right, <em>y</em> axis points upwards, and both axes' scaling unit is 1mm.  The coordinate space is ‘just enough’ wide and high.  This coordinate system is called <em>absolute</em>.</p>
+
+<p>The absolute coordinate system is the current one at the very beginning of a drawing.  Certain commands can change the current coordinate system by translating, rotating and uniform scaling.  The three kinds of transformations can be combined, but transformations of the same kind do not accumulate.  I.e., translation, rotation, and scaling, each taken in isolation, are always carried out with respect to the absolute coordinate system: see the details in the descriptions of the respective commands <tt>move</tt>,  <tt>rotate</tt>, and <tt>unit</tt> below.</p>
+
+<p>As explained above, global translation and (or) scaling can be specified externally with respect to the drawing, through command-line arguments to <tt>sp</tt>.  If present, such a transformation adds to each transformation specified in the drawing itself (or to a lacking such transformation), as if changing each current coordinate system accordingly.</p>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Construction commands</span><br><br>
+All coordinates and magnitudes are interpreted with respect to the current coordinate system.
+</p>
+<dl>
+<dt><tt>points</tt></dt>
+<dd>Points placement.  On each of the following lines, a pair of coordinates of a point is given.</dd>
+<dt><tt>polyline</tt></dt>
+<dd>Constructing a polyline.  The vertices of the polyline are given as point coordinates, a pair a line.</dd>
+<dt><tt>polygon</tt></dt>
+<dd>Similar to the above command, but constructs a closed figure – a polygon.</dd>
+<dt><tt>polygon*</tt></dt>
+<dd>Similar to <tt>polygon</tt>, but the figure is filled rather than stroked.</dd>
+<dt><tt>lines</tt></dt>
+<dd>Line segments construction.  On each of the following lines, one segment is specified by its end points, i.e. four coordinates.</dd>
+<dt><tt>lines&gt;</tt></dt>
+<dd>Similar to <tt>lines</tt>, but an arrow head is drawn at the end point of each segment.</dd>
+<dt><tt>lines&lt;&gt;</tt></dt>
+<dd>Similar to <tt>lines&gt;</tt>, but an arrow head is also drawn at the start point of each segment.</dd>
+<dt><tt>circles</tt></dt>
+<dd>Circles construction.  Each circle is specified by its centre's coordinates and its radius – a circle a line.</dd>
+<dt><tt>circles*</tt></dt>
+<dd>Similar to <tt>circles</tt>, but the circles are filled rather than stroked.</dd>
+</dl>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Contextual commands: transformations</span><br><br>
+Each of the following commands changes the current coordinate system, so that data (coordinates, lengths) in the subsequent construction commands is interpreted in the new system.
+
+</p><dl>
+<dt><tt>move</tt></dt>
+<dd>The current coordinate system is changed by a translation: the direction of the axes and the scaling remain the same while the origin moves to a specified point.  The command's arguments are the coordinates of that point in the absolute coordinate system (with neither translation nor scaling).</dd>
+<dt><tt>rotate</tt></dt>
+<dd>The coordinate system is rotated about its origin.  The command's argument is the angle in degrees which the <em>x</em> axis of the new coordinate system should make with that of the absolute system (positive values measure counterclockwise).</dd>
+<dt><tt>unit</tt></dt>
+<dd>Sets a scaling unit for coordinates and lengths – a number in millimeters.  For example, if the scaling unit is set to 5, a coordinate pair 12 7 corresponds to (60mm,35mm), and a radius of 6 means 30mm.</dd>
+</dl>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Contextual commands: visualization attributes</span><br>
+</p><dl>
+<dt><tt>colour</tt></dt>
+<dd>Colour selection.  The command can be given one or three number arguments, all in the range [0,1]. One number specifies a level of grey, from 0 for black to 1 for white. Three numbers choose the amounts of the basic ingredients — red, green, and blue — to be mixed for obtaining the colour.<br>
+A colour can also be specified by one of the <a href="https://w3.org/TR/SVG11/types.html#ColorKeywords">SVG colour names</a> (a.k.a. X11 colours). See also <a href="https://december.com/html/spec/colorsvghex.html">here</a>.<br>
+Subsequently all points, lines, etc. are drawn in the specified colour.<br>
+Black is used by default.</dd>
+<dt><tt>width</tt></dt>
+<dd>The argument is the width in millimeters.  All following figures are drawn with this line width.  The default line width is 0.2mm.</dd>
+<dt><tt>linetype</tt></dt>
+<dd>Sets a line pattern to be used for drawing all kinds of lines.  The command's arguments are numbers – sizes in millimeters.  If there are arguments, there must be at least two of them.  The second, third, etc. numbers set the lengths to draw, skip, draw, skip, etc. along a line.  (In actual drawing, the list of numbers is repeated until the line end is reached.)  The first argument sets the offset from the beginning of the so established drawing pattern where the pattern starts actually applying when drawing a line.  Arguments cannot be negative but may be zero.  If no arguments are given, a solid line type is set – same as the one used by default.</dd>
+<dt><tt>cap</tt></dt>
+<dd>Sets how the ends of the open lines are drawn.  The argument is a single character as follows: <b><code>)</code></b> (right parenthesis) sets a round ending – a semicircle that extends the actual line; <b><code>]</code></b> (right bracket) sets a similarly extending (half-)square ending.  Any other argument or no argument means ‘butt ends’, i.e. no extension, which is also what is done by default.</dd>
+<dt><tt>join</tt></dt>
+<dd>Sets how the joins of line segments in polylines and polygons are drawn.  The argument is a single character as follows: <b><code>)</code></b> (right parenthesis) sets a round join – a circular wedge extending the two lines; <b><code>&gt;</code></b> (right angle bracket or the ‘greater than’ sign) sets a mitre (angular) join.  Any other argument or no argument means a beveled join, which is also what is done by default.</dd>
+</dl>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Geometry vs denotation</span><br><br>
+Normally a drawing, such as mathematical, construction, or engineering plot, and most kinds of flowcharts, must admit scaling up or down while maintaining the same line widths.  The drawing may have to be scaled to fit a certain overall space, but the line widths will still have to comply with technical requirements, independent of scaling.  The same holds of line types.</p>
+
+<p><tt>Sp</tt> meets such needs by keeping the notions of line width and line type separate from that of geometric magnitude.  Line widths, as well as the lengths of the parts of line type patterns, are always set in millimeters rather than current units, and so are not affected by scaling, be it through <tt>unit</tt> commands or through a command-line argument.  Arrow head sizes fit the respective line widths, and therefore are also unaffected by scaling.</p>
+
+<p>Point marks are always the same, predefined in <tt>sp</tt> kind and size, not dependent on scaling or line width.  Only the colour of point marks can be varied.</p>
+
+<p>Point marks are special in yet another way.  Unlike all othet objects, which get drawn, and will overlay each other, in the order of their appearance in the <tt>sp</tt> input file, points are drawn last, and therefore on top of everything that may happen to be at the same place, as this is what a user would normally expect to see.  This behaviour is enforced by <tt>sp</tt> regardless of where points appear in the input.  On the other hand, of course, the location and the colour of a point mark are always determined from the context in which the point is encountered in the input.</p>
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> Examples</span><br><br>
+Here are several examples of <span class="csc">SVG</span> pictures produced by <tt>sp</tt>, along with the respective input files.</p>
+
+<p>&nbsp;</p>
+
+<hr noshade="" width="100%">
+
+<p><br>The picture is a series of <u>horizontal</u> line segments (of greatly varying <u>widths</u>) along the same line.</p>
+
+<p align="center">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="117mm" height="37mm" viewBox="-3 212 117 37">
+<g transform="matrix(1 0 0 -1 0 461)">
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(0,0,0)" fill="rgb(0,0,0)">
+<g fill="none" stroke-width="0.4" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="-0.8" y1="0" x2="19.8" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(0,0,0)" fill="rgb(0,0,0)">
+<g fill="none" stroke-width="0.8" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="-0.3" y1="0" x2="0" y2="0"></line>
+<line x1="19.3" y1="0" x2="19" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(0,0,0)" fill="rgb(0,0,0)">
+<g fill="none" stroke-width="0.54" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="2" y1="0" x2="2.5" y2="0"></line>
+<line x1="17" y1="0" x2="16.5" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(179,51,77)" fill="rgb(179,51,77)">
+<g fill="none" stroke-width="1.6" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="0" y1="0" x2="0.5" y2="0"></line>
+<line x1="19" y1="0" x2="18.5" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(179,51,77)" fill="rgb(179,51,77)">
+<g fill="none" stroke-width="2.8" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="0.5" y1="0" x2="1" y2="0"></line>
+<line x1="18.5" y1="0" x2="18" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(179,51,77)" fill="rgb(179,51,77)">
+<g fill="none" stroke-width="4" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="1" y1="0" x2="1.5" y2="0"></line>
+<line x1="18" y1="0" x2="17.5" y2="0"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(8,230) rotate(0) scale(5,5)" stroke="rgb(179,51,77)" fill="rgb(179,51,77)">
+<g fill="none" stroke-width="5.2" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="1.5" y1="0" x2="2" y2="0"></line>
+<line x1="17.5" y1="0" x2="17" y2="0"></line>
+</g>
+</g>
+</g></svg>
+</p>
+
+<p align="center" onclick="alert(
+  &#39;unit 5            - мащаб 5мм\n&#39;
++ &#39;\n&#39;
++ &#39;move 8 230\n&#39;
++ &#39;\n&#39;
++ &#39;width 2           - лост на щангата\n&#39;
++ &#39;lines\n&#39;
++ &#39;-.8 0 19.8 0\n&#39;
++ &#39;\n&#39;
++ &#39;width 4           - външни ограничители\n&#39;
++ &#39;lines\n&#39;
++ &#39;-.3 0 0 0\n&#39;
++ &#39;19.3 0 19.0 0\n&#39;
++ &#39;\n&#39;
++ &#39;width 2.7         - вътрешни ограничители\n&#39;
++ &#39;lines\n&#39;
++ &#39;2.0 0 2.5 0\n&#39;
++ &#39;17.0 0 16.5 0\n&#39;
++ &#39;\n&#39;
++ &#39;colour .7 .2 .3   - дискове\n&#39;
++ &#39;width 8\n&#39;
++ &#39;lines\n&#39;
++ &#39;0 0 .5 0\n&#39;
++ &#39;19.0 0 18.5 0\n&#39;
++ &#39;\n&#39;
++ &#39;width 14\n&#39;
++ &#39;lines\n&#39;
++ &#39;.5 0 1.0 0\n&#39;
++ &#39;18.5 0 18.0 0\n&#39;
++ &#39;\n&#39;
++ &#39;width 20\n&#39;
++ &#39;lines\n&#39;
++ &#39;1.0 0 1.5 0\n&#39;
++ &#39;18.0 0 17.5 0\n&#39;
++ &#39;\n&#39;
++ &#39;width 26\n&#39;
++ &#39;lines\n&#39;
++ &#39;1.5 0 2.0 0\n&#39;
++ &#39;17.5 0 17.0 0\n&#39;
+)"><span class="codbtn">&nbsp;Click here for the SP code for this picture&nbsp;</span></p>
+
+<p>&nbsp;</p>
+
+<hr noshade="" width="100%">
+
+<p><br>Lines, points, varying colours and line widths.</p>
+
+<p align="center">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="112mm" height="102mm" viewBox="4 4 112 102">
+<g transform="matrix(1 0 0 -1 0 110)">
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(0,0,0)" fill="rgb(0,0,0)">
+<g fill="none" stroke-width="0.07" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<polygon points="8,1 10,3 11,6 9,9 5,7 6,6 6,7 7,7 9,6 5,5 3,4 4,6 3,7 5,10 2,8 1,3 4,2 6,1 7,3 "></polygon>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(0,0,255)" fill="rgb(0,0,255)">
+<g fill="none" stroke-width="0.02" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<line x1="2" y1="8" x2="3" y2="7"></line>
+<line x1="5" y1="7" x2="6" y2="7"></line>
+<line x1="6" y1="7" x2="9" y2="9"></line>
+<line x1="9" y1="9" x2="7" y2="7"></line>
+<line x1="9" y1="9" x2="9" y2="6"></line>
+<line x1="3" y1="7" x2="1" y2="3"></line>
+<line x1="3" y1="7" x2="3" y2="4"></line>
+<line x1="9" y1="6" x2="11" y2="6"></line>
+<line x1="9" y1="6" x2="7" y2="3"></line>
+<line x1="9" y1="6" x2="10" y2="3"></line>
+<line x1="5" y1="5" x2="4" y2="2"></line>
+<line x1="5" y1="5" x2="7" y2="3"></line>
+<line x1="7" y1="3" x2="10" y2="3"></line>
+<line x1="3" y1="4" x2="1" y2="3"></line>
+<line x1="3" y1="4" x2="4" y2="2"></line>
+<line x1="4" y1="2" x2="7" y2="3"></line>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(230,0,204)" fill="rgb(230,0,204)">
+<g fill="none" stroke-width="0.02" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<polyline points="8.33,2.33 8.67,4 7,4.67 5.33,3.33 5.67,2 "></polyline>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(230,0,204)" fill="rgb(230,0,204)">
+<g fill="none" stroke-width="0.02" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<polyline points="8.67,4 10,5 9.67,7 8.33,7.33 7.33,7.67 6.67,7.67 5.67,6.67 "></polyline>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(230,0,204)" fill="rgb(230,0,204)">
+<g fill="none" stroke-width="0.02" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<polyline points="5.33,3.33 4,3.67 2.67,3 2.33,4.67 3.33,5.67 "></polyline>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(230,0,204)" fill="rgb(230,0,204)">
+<g fill="none" stroke-width="0.02" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<polyline points="2.33,4.67 2,6 3.33,8.33 "></polyline>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(255,0,0)" fill="rgb(255,0,0)">
+<circle cx="8" cy="1" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="6" cy="7" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="9" cy="6" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="3" cy="7" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="4" cy="2" r="0.07" stroke-width="0.04" fill="white"></circle>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(0,128,0)" fill="rgb(0,128,0)">
+<circle cx="10" cy="3" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="9" cy="9" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="6" cy="6" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5" cy="5" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="4" cy="6" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5" cy="10" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="1" cy="3" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="6" cy="1" r="0.07" stroke-width="0.04" fill="white"></circle>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(0,0,255)" fill="rgb(0,0,255)">
+<circle cx="11" cy="6" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5" cy="7" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="7" cy="7" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="3" cy="4" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="2" cy="8" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="7" cy="3" r="0.07" stroke-width="0.04" fill="white"></circle>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(10,10)" stroke="rgb(153,0,128)" fill="rgb(153,0,128)">
+<circle cx="8.33" cy="2.33" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="8.67" cy="4" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="7" cy="4.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5.33" cy="3.33" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5.67" cy="2" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="10" cy="5" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="9.67" cy="7" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="8.33" cy="7.33" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="7.33" cy="7.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="6.67" cy="7.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="5.67" cy="6.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="4" cy="3.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="2.67" cy="3" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="2.33" cy="4.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="3.33" cy="5.67" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="2" cy="6" r="0.07" stroke-width="0.04" fill="white"></circle>
+<circle cx="3.33" cy="8.33" r="0.07" stroke-width="0.04" fill="white"></circle>
+</g>
+</g></svg>
+</p>
+
+<p align="center" onclick="alert(
+  &#39;unit 10\n&#39;
++ &#39;\n&#39;
++ &#39;- „червени“ върхове\n&#39;
++ &#39;colour red\n&#39;
++ &#39;points\n&#39;
++ &#39;8 1\n&#39;
++ &#39;6 7\n&#39;
++ &#39;9 6\n&#39;
++ &#39;3 7\n&#39;
++ &#39;4 2\n&#39;
++ &#39;\n&#39;
++ &#39;- „зелени“ върхове\n&#39;
++ &#39;colour green\n&#39;
++ &#39;points\n&#39;
++ &#39;10  3\n&#39;
++ &#39; 9  9\n&#39;
++ &#39; 6  6\n&#39;
++ &#39; 5  5\n&#39;
++ &#39; 4  6\n&#39;
++ &#39; 5 10\n&#39;
++ &#39; 1  3\n&#39;
++ &#39; 6  1\n&#39;
++ &#39;\n&#39;
++ &#39;- „сини“ върхове\n&#39;
++ &#39;colour blue\n&#39;
++ &#39;points\n&#39;
++ &#39;11 6\n&#39;
++ &#39; 5 7\n&#39;
++ &#39; 7 7\n&#39;
++ &#39; 3 4\n&#39;
++ &#39; 2 8\n&#39;
++ &#39; 7 3\n&#39;
++ &#39;\n&#39;
++ &#39;- контур на многоъгълника\n&#39;
++ &#39;colour 0\n&#39;
++ &#39;width .7\n&#39;
++ &#39;polygon\n&#39;
++ &#39;8 1\n&#39;
++ &#39;10 3\n&#39;
++ &#39;11 6\n&#39;
++ &#39;9 9\n&#39;
++ &#39;5 7\n&#39;
++ &#39;6 6\n&#39;
++ &#39;6 7\n&#39;
++ &#39;7 7\n&#39;
++ &#39;9 6\n&#39;
++ &#39;5 5\n&#39;
++ &#39;3 4\n&#39;
++ &#39;4 6\n&#39;
++ &#39;3 7\n&#39;
++ &#39;5 10\n&#39;
++ &#39;2 8\n&#39;
++ &#39;1 3\n&#39;
++ &#39;4 2\n&#39;
++ &#39;6 1\n&#39;
++ &#39;7 3\n&#39;
++ &#39;\n&#39;
++ &#39;width .2\n&#39;
++ &#39;\n&#39;
++ &#39;- диагонали на триангулацията\n&#39;
++ &#39;colour blue\n&#39;
++ &#39;lines\n&#39;
++ &#39;2 8 3 7\n&#39;
++ &#39;5 7 6 7\n&#39;
++ &#39;6 7 9 9\n&#39;
++ &#39;9 9 7 7\n&#39;
++ &#39;9 9 9 6\n&#39;
++ &#39;3 7 1 3\n&#39;
++ &#39;3 7 3 4\n&#39;
++ &#39;9 6 11 6\n&#39;
++ &#39;9 6 7 3\n&#39;
++ &#39;9 6 10 3\n&#39;
++ &#39;5 5 4 2\n&#39;
++ &#39;5 5 7 3\n&#39;
++ &#39;7 3 10 3\n&#39;
++ &#39;3 4 1 3\n&#39;
++ &#39;3 4 4 2\n&#39;
++ &#39;4 2 7 3\n&#39;
++ &#39;\n&#39;
++ &#39;- дървото (дуалния граф)\n&#39;
++ &#39;- (точки и начупени линии)\n&#39;
++ &#39;colour .6 0 .5\n&#39;
++ &#39;points\n&#39;
++ &#39;8.33 2.33\n&#39;
++ &#39;8.67 4\n&#39;
++ &#39;7 4.67\n&#39;
++ &#39;5.33 3.33\n&#39;
++ &#39;5.67 2\n&#39;
++ &#39;10 5\n&#39;
++ &#39;9.67 7\n&#39;
++ &#39;8.33 7.33\n&#39;
++ &#39;7.33 7.67\n&#39;
++ &#39;6.67 7.67\n&#39;
++ &#39;5.67 6.67\n&#39;
++ &#39;4 3.67\n&#39;
++ &#39;2.67 3\n&#39;
++ &#39;2.33 4.67\n&#39;
++ &#39;3.33 5.67\n&#39;
++ &#39;2 6\n&#39;
++ &#39;3.33 8.33\n&#39;
++ &#39;\n&#39;
++ &#39;colour .9 0 .8\n&#39;
++ &#39;polyline\n&#39;
++ &#39;8.33 2.33\n&#39;
++ &#39;8.67 4\n&#39;
++ &#39;7 4.67\n&#39;
++ &#39;5.33 3.33\n&#39;
++ &#39;5.67 2\n&#39;
++ &#39;\n&#39;
++ &#39;polyline\n&#39;
++ &#39;8.67 4\n&#39;
++ &#39;10 5\n&#39;
++ &#39;9.67 7\n&#39;
++ &#39;8.33 7.33\n&#39;
++ &#39;7.33 7.67\n&#39;
++ &#39;6.67 7.67\n&#39;
++ &#39;5.67 6.67\n&#39;
++ &#39;\n&#39;
++ &#39;polyline\n&#39;
++ &#39;5.33 3.33\n&#39;
++ &#39;4 3.67\n&#39;
++ &#39;2.67 3\n&#39;
++ &#39;2.33 4.67\n&#39;
++ &#39;3.33 5.67\n&#39;
++ &#39;\n&#39;
++ &#39;polyline\n&#39;
++ &#39;2.33 4.67\n&#39;
++ &#39;2 6\n&#39;
++ &#39;3.33 8.33\n&#39;
+)"><span class="codbtn">&nbsp;Click here for the SP code for this picture&nbsp;</span></p>
+
+<p>&nbsp;</p>
+
+<hr noshade="" width="100%">
+
+<p><br>Rotating the coordinate system uniformly around the centre of the figure makes it possible to draw the ‘same’ circle many times.</p>
+
+<p></p>
+
+<p align="center">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="64mm" height="64mm" viewBox="-32 -32 64 64">
+<g transform="matrix(1 0 0 -1 0 0)">
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(1,1)" stroke="rgb(128,128,128)" fill="rgb(128,128,128)">
+<g fill="none" stroke-width="0.3" stroke-dasharray="none" stroke-linecap="butt" stroke-linejoin="bevel">
+<circle cx="0" cy="0" r="26.04"></circle>
+<circle cx="0" cy="0" r="15.78"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(90) scale(1,1)" stroke="rgb(0,0,0)" fill="rgb(0,0,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(117.692) scale(1,1)" stroke="rgb(255,0,255)" fill="rgb(255,0,255)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(145.385) scale(1,1)" stroke="rgb(128,0,128)" fill="rgb(128,0,128)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(173.077) scale(1,1)" stroke="rgb(255,0,0)" fill="rgb(255,0,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(200.769) scale(1,1)" stroke="rgb(128,0,0)" fill="rgb(128,0,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(228.462) scale(1,1)" stroke="rgb(255,255,0)" fill="rgb(255,255,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(256.154) scale(1,1)" stroke="rgb(128,128,0)" fill="rgb(128,128,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(283.846) scale(1,1)" stroke="rgb(0,255,0)" fill="rgb(0,255,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(311.538) scale(1,1)" stroke="rgb(0,128,0)" fill="rgb(0,128,0)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(339.231) scale(1,1)" stroke="rgb(0,255,255)" fill="rgb(0,255,255)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(366.923) scale(1,1)" stroke="rgb(0,128,128)" fill="rgb(0,128,128)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(394.615) scale(1,1)" stroke="rgb(0,0,255)" fill="rgb(0,0,255)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(422.308) scale(1,1)" stroke="rgb(0,0,128)" fill="rgb(0,0,128)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="20.89" cy="0" r="5"></circle>
+</g>
+</g>
+</g>
+</svg>
+</p>
+
+<p align="center" onclick="alert(
+  &#39;colour gray\n&#39;
++ &#39;width .3\n&#39;
++ &#39;circles\n&#39;
++ &#39;0 0 26.04\n&#39;
++ &#39;0 0 15.78\n&#39;
++ &#39;\n&#39;
++ &#39;rotate 90\n&#39;
++ &#39;colour black\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 117.692307\n&#39;
++ &#39;colour fuchsia\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 145.384613\n&#39;
++ &#39;colour purple\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 173.07692\n&#39;
++ &#39;colour red\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 200.769226\n&#39;
++ &#39;colour maroon\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 228.461533\n&#39;
++ &#39;colour yellow\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 256.153839\n&#39;
++ &#39;colour olive\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 283.846161\n&#39;
++ &#39;colour lime\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 311.538483\n&#39;
++ &#39;colour green\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 339.230804\n&#39;
++ &#39;colour aqua\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 366.923126\n&#39;
++ &#39;colour teal\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 394.615448\n&#39;
++ &#39;colour blue\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
++ &#39;rotate 422.30777\n&#39;
++ &#39;colour navy\n&#39;
++ &#39;circles*\n&#39;
++ &#39;20.89 0 5\n&#39;
+)"><span class="codbtn">&nbsp;Click here for the SP code for this picture&nbsp;</span></p>
+
+<p>&nbsp;</p>
+
+<hr noshade="" width="100%">
+
+<p><br>Line types, widths, caps, fills, arrows, rotations.  Clock tick marks are just two instances of the same circle with properly chosen line types, caps, and widths.</p>
+
+<p></p>
+
+<p align="center">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="72mm" height="72mm" viewBox="-36 -36 72 72">
+<g transform="matrix(1 0 0 -1 0 0)">
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(1,1)" stroke="rgb(0,128,128)" fill="rgb(0,128,128)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="0" cy="0" r="30"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(1,1)" stroke="rgb(0,255,255)" fill="rgb(0,255,255)">
+<g stroke="none" fill-rule="evenodd">
+<circle cx="0" cy="0" r="28"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(1,1)" stroke="rgb(0,0,128)" fill="rgb(0,0,128)">
+<g fill="none" stroke-width="0.7" stroke-dasharray="0 2.62 " stroke-dashoffset="0" stroke-linecap="round" stroke-linejoin="bevel">
+<circle cx="0" cy="0" r="25"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(0) scale(1,1)" stroke="rgb(0,0,128)" fill="rgb(0,0,128)">
+<g fill="none" stroke-width="2" stroke-dasharray="0 13.09 " stroke-dashoffset="0" stroke-linecap="square" stroke-linejoin="bevel">
+<circle cx="0" cy="0" r="25"></circle>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(3.5) scale(1,1)" stroke="rgb(0,0,179)" fill="rgb(0,0,179)">
+<g fill="none" stroke-width="1.5" stroke-dasharray="none" stroke-linecap="round" stroke-linejoin="bevel">
+<line x1="0" y1="0" x2="20" y2="0"></line>
+<g stroke="none" fill="rgb(0,0,179)">
+<g transform="translate(20,0) rotate(0) scale(1.5,1.5)">
+<path d="M-4.5,0 L-3,-1.5 0,-0.5 0.5,0 0,0.5 -3,1.5 z"></path>
+</g>
+</g>
+</g>
+</g>
+
+<g transform="translate(0,0) scale(1,1) translate(0,0) rotate(132) scale(1,1)" stroke="rgb(0,0,179)" fill="rgb(0,0,179)">
+<g fill="none" stroke-width="1.1" stroke-dasharray="none" stroke-linecap="round" stroke-linejoin="bevel">
+<line x1="0" y1="0" x2="22.5" y2="0"></line>
+<g stroke="none" fill="rgb(0,0,179)">
+<g transform="translate(22.5,0) rotate(0) scale(1.1,1.1)">
+<path d="M-4.5,0 L-3,-1.5 0,-0.5 0.5,0 0,0.5 -3,1.5 z"></path>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
+</p>
+
+<p align="center" onclick="alert(
+  &#39;colour teal      - face\n&#39;
++ &#39;circles*\n&#39;
++ &#39;0 0 30\n&#39;
++ &#39;colour aqua\n&#39;
++ &#39;circles*\n&#39;
++ &#39;0 0 28\n&#39;
++ &#39;\n&#39;
++ &#39;colour navy      - tick marks\n&#39;
++ &#39;width .7                - minute\n&#39;
++ &#39;cap )\n&#39;
++ &#39;linetype 0 0 2.62\n&#39;
++ &#39;circles\n&#39;
++ &#39;0 0 25\n&#39;
++ &#39;width 2                 - hour\n&#39;
++ &#39;cap ]\n&#39;
++ &#39;linetype 0 0 13.09\n&#39;
++ &#39;circles\n&#39;
++ &#39;0 0 25\n&#39;
++ &#39;\n&#39;
++ &#39;linetype         - arrows\n&#39;
++ &#39;cap )\n&#39;
++ &#39;colour 0 0 .7\n&#39;
++ &#39;width 1.5               - hour\n&#39;
++ &#39;rotate 3.5\n&#39;
++ &#39;lines&gt;\n&#39;
++ &#39;0 0 20 0\n&#39;
++ &#39;width 1.1               - minute\n&#39;
++ &#39;rotate 132\n&#39;
++ &#39;lines&gt;\n&#39;
++ &#39;0 0 22.5 0\n&#39;
+)"><span class="codbtn">&nbsp;Click here for the SP code for this picture&nbsp;</span></p>
+
+<p>&nbsp;</p>
+
+<hr noshade="" width="100%">
+
+<p><br>
+<span class="topic"><font size="+4"><sub>•</sub></font> The program</span><br><br>
+Here are executables for <a href="http://www.math.bas.bg/bantchev/sp/sp">GNU/Linux</a> and <a href="http://www.math.bas.bg/bantchev/sp/sp.exe">MS&nbsp;Windows</a>, and here is <a href="http://www.math.bas.bg/bantchev/sp/sp.cpp">the source text</a>.</p>
+
+<p>The program is written in standard <b>C++</b> language.  With this note I grant everyone the right to use the program, in source or executable, for what they see fit.  There is only one restriction: if you change the program in any way, please notify me and distribute your version under a name different from <tt>sp</tt>.</p>
+
+<p align="right"><br><a href="http://www.math.bas.bg/bantchev"><em>Boyko Bantchev</em></a>&nbsp;</p>
+
+
+
+</body></html>

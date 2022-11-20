@@ -1,0 +1,3 @@
+http://www.math.bas.bg/bantchev/vecta - header-only library
+http://www.math.bas.bg/bantchev/sp - rendering program
+http://www.math.bas.bg/bantchev/ForGe
